@@ -18,17 +18,17 @@ gulp.task('dist', function(done) {
 });
 
 gulp.task('bundle', ['bundle:vendor', 'bundle:app'], function () {
-    return gulp.src('index.html')
+    return gulp.src('dev/client/index.html')
         .pipe(htmlreplace({
             'app': mainBundleName,
             'vendor': vendorBundleName
         }))
-        .pipe(gulp.dest('./dist'));
+        .pipe(gulp.dest('./public/dist'));
 });
 
 gulp.task('bundle:vendor', function () {
     return builder
-        .buildStatic('dev/client/app/vendor.js', './dist/' + vendorBundleName)
+        .buildStatic('dev/client/app/vendor.js', './public/dist/' + vendorBundleName)
         .catch(function (err) {
             console.log('Vendor bundle error');
             console.log(err);
@@ -37,7 +37,7 @@ gulp.task('bundle:vendor', function () {
 
 gulp.task('bundle:app', function () {
     return builder
-        .buildStatic('dev/client/app/main.js', './dist/' + mainBundleName)
+        .buildStatic('dev/client/app/main.js', './public/dist/' + mainBundleName)
         .catch(function (err) {
             console.log('App bundle error');
             console.log(err);
@@ -50,13 +50,13 @@ gulp.task('compile_ts', ['clean:ts'], shell.task([
 
 gulp.task('copy_assets', function() {
     return gulp.src(['./dev/client/assets/**/*'])
-        .pipe(gulp.dest('./dist/assets'));
+        .pipe(gulp.dest('./public/dist/assets'));
 });
 
 gulp.task('clean', ['clean:ts', 'clean:dist']);
 
 gulp.task('clean:dist', function () {
-    return gulp.src(['./dist'], {read: false})
+    return gulp.src(['./public/dist'], {read: false})
         .pipe(clean());
 });
 
