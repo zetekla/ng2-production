@@ -23,7 +23,7 @@
       '@angular/forms': 'npm:@angular/forms/bundles/forms.umd.js',
       // other libraries
       'rxjs': 'npm:rxjs',
-      'angular2-in-memory-web-api': 'npm:angular2-in-memory-web-api',
+      'angular-in-memory-web-api': 'npm:angular-in-memory-web-api',
       'text': 'plugin-text.js',
 
       //shims
@@ -40,7 +40,7 @@
       rxjs: {
         defaultExtension: 'js'
       },
-      'angular2-in-memory-web-api': {
+      'angular-in-memory-web-api': {
         main: './index.js',
         defaultExtension: 'js'
       }
