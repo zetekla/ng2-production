@@ -49,8 +49,8 @@ gulp.task('compile_ts', ['clean:ts'], shell.task([
 ]));
 
 gulp.task('copy_assets', function() {
-     return gulp.src(['./assets/**/*'], {base:"."})
-        .pipe(gulp.dest('./dist'));
+    return gulp.src(['./dev/client/assets/**/*'])
+        .pipe(gulp.dest('./dist/assets'));
 });
 
 gulp.task('clean', ['clean:ts', 'clean:dist']);
