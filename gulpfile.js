@@ -10,9 +10,24 @@ var bundleHash = new Date().getTime();
 var mainBundleName = bundleHash + '.main.bundle.js';
 var vendorBundleName = bundleHash + '.vendor.bundle.js';
 
+    /* CSS */
+var postcss = require('gulp-postcss'),
+    sourcemaps = require('gulp-sourcemaps'),
+    autoprefixer = require('autoprefixer'),
+    precss = require('precss'),
+    cssnano = require('cssnano'),
+    minify  = require('gulp-minify-css'),
+
+    /* Misc. */
+    ext_replace = require('gulp-ext-replace'),
+    concat = require('gulp-concat'),
+    es = require('event-stream')
+
+;
+
 // This is main task for production use
 gulp.task('dist', function(done) {
-    runSequence('clean', 'compile_ts', 'bundle', 'copy_assets', function() {
+    runSequence('clean', 'compile_ts', 'bundle', 'build:css', function() {
         done();
     });
 });
@@ -48,12 +63,28 @@ gulp.task('compile_ts', ['clean:ts'], shell.task([
     'tsc'
 ]));
 
-gulp.task('copy_assets', function() {
-    return gulp.src(['./dev/client/assets/**/*'])
+gulp.task('build:css', function() {
+    return gulp.src('./dev/client/assets/**/*')
+    .pipe(sourcemaps.init())
+    .pipe(postcss([precss, autoprefixer, cssnano]))
+    .pipe(sourcemaps.write())
+    .pipe(ext_replace('.css'))
+    .pipe(gulp.dest('./public/dist/assets'));
+});
+
+gulp.task('bundle:css', ['clean:assets', 'build:css'], function() {
+    return gulp.src(['./public/dist/assets/**/*', './public/dist/assets/!styles{.min}.css'])
+        .pipe(concat('styles.min.css'))
+        .pipe(minify())
         .pipe(gulp.dest('./public/dist/assets'));
 });
 
 gulp.task('clean', ['clean:ts', 'clean:dist']);
+
+gulp.task('clean:assets', function () {
+    return gulp.src(['./public/dist/assets/**/*.css'], {read: false})
+        .pipe(clean());
+});
 
 gulp.task('clean:dist', function () {
     return gulp.src(['./public/dist'], {read: false})
