@@ -27,12 +27,12 @@ var postcss = require('gulp-postcss'),
 
 // This is main task for production use
 gulp.task('dist', function(done) {
-    runSequence('clean', 'compile_ts', 'bundle', 'build:css', function() {
+    runSequence('clean', 'compile_ts', 'bundle', function() {
         done();
     });
 });
 
-gulp.task('bundle', ['bundle:vendor', 'bundle:app'], function () {
+gulp.task('bundle', ['bundle:vendor', 'bundle:app', 'bundle:css'], function () {
     return gulp.src('dev/client/index.html')
         .pipe(htmlreplace({
             'app': mainBundleName,
@@ -72,7 +72,7 @@ gulp.task('build:css', function() {
     .pipe(gulp.dest('./public/dist/assets'));
 });
 
-gulp.task('bundle:css', ['clean:assets', 'build:css'], function() {
+gulp.task('bundle:css', ['build:css'], function() {
     return gulp.src(['./public/dist/assets/**/*', './public/dist/assets/!styles{.min}.css'])
         .pipe(concat('styles.min.css'))
         .pipe(minify())
@@ -80,11 +80,6 @@ gulp.task('bundle:css', ['clean:assets', 'build:css'], function() {
 });
 
 gulp.task('clean', ['clean:ts', 'clean:dist']);
-
-gulp.task('clean:assets', function () {
-    return gulp.src(['./public/dist/assets/**/*.css'], {read: false})
-        .pipe(clean());
-});
 
 gulp.task('clean:dist', function () {
     return gulp.src(['./public/dist'], {read: false})
