@@ -28,7 +28,7 @@ gulp.task('bundle', ['bundle:vendor', 'bundle:app'], function () {
 
 gulp.task('bundle:vendor', function () {
     return builder
-        .buildStatic('app/vendor.js', './dist/' + vendorBundleName)
+        .buildStatic('dev/client/app/vendor.js', './dist/' + vendorBundleName)
         .catch(function (err) {
             console.log('Vendor bundle error');
             console.log(err);
@@ -37,7 +37,7 @@ gulp.task('bundle:vendor', function () {
 
 gulp.task('bundle:app', function () {
     return builder
-        .buildStatic('app/main.js', './dist/' + mainBundleName)
+        .buildStatic('dev/client/app/main.js', './dist/' + mainBundleName)
         .catch(function (err) {
             console.log('App bundle error');
             console.log(err);
@@ -61,6 +61,6 @@ gulp.task('clean:dist', function () {
 });
 
 gulp.task('clean:ts', function () {
-    return gulp.src(['./app/**/*.js', './app/**/*.js.map'], {read: false})
+    return gulp.src(['./dev/client/app/**/*.js', './dev/client/app/**/*.js.map'], {read: false})
         .pipe(clean());
 });
